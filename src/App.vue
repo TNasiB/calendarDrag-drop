@@ -1,8 +1,12 @@
 <template>
   <div id="app" class="appworkplace">
     <section class="appworkplace__main">
-      <PickerCalendar :events="events" />
-      <UserList :list="list" />
+      <PickerCalendar
+        :events="events"
+        @add-event="addEvent"
+        @remove-item="removeItem"
+      />
+      <UserList :groups="groups" :notedCount="notedCount" />
     </section>
   </div>
 </template>
@@ -18,41 +22,146 @@ export default {
   },
   data() {
     return {
-      list: [
+      groups: [
         {
-          id: 1,
-          title: "Ext. Event 1",
-          content: "content 1",
-          duration: 60,
+          title: "Отдел продаж",
+          users: [
+            {
+              id: 1,
+              name: "Иванов Иван Иванович",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+            {
+              id: 2,
+              name: "Иванов Иван Васильевич",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+            {
+              id: 3,
+              name: "Иванов Иван Евгеневич",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+            {
+              id: 4,
+              name: "Иванов Иван Андреевич",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+            {
+              id: 5,
+              name: "Иванов Иван Алексеевич",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+            {
+              id: 6,
+              name: "Иванов Иван Георгиевич",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+            {
+              id: 7,
+              name: "Иванов Иван Глебович",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+            {
+              id: 8,
+              name: "Иванов Иван Артемович",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+            {
+              id: 9,
+              name: "Иванов Иван Ирекович",
+              duration: 60,
+              title: "Отдел продаж",
+            },
+          ],
         },
         {
-          id: 2,
-          title: "Ext. Event 2",
-          content: "content 2",
-          duration: 30,
-        },
-        {
-          id: 3,
-          title: "Ext. Event 3",
-          content: "content 3",
+          title: "Склад",
+          users: [
+            {
+              id: 1,
+              name: "Иванов Иван Иванович",
+              duration: 60,
+              title: "Склад",
+            },
+            {
+              id: 2,
+              name: "Иванов Иван Васильевич",
+              duration: 60,
+              title: "Склад",
+            },
+            {
+              id: 3,
+              name: "Иванов Иван Евгеневич",
+              duration: 60,
+              title: "Склад",
+            },
+            {
+              id: 4,
+              name: "Иванов Иван Андреевич",
+              duration: 60,
+              title: "Склад",
+            },
+            {
+              id: 5,
+              name: "Иванов Иван Алексеевич",
+              duration: 60,
+              title: "Склад",
+            },
+            {
+              id: 6,
+              name: "Иванов Иван Георгиевич",
+              duration: 60,
+              title: "Склад",
+            },
+            {
+              id: 7,
+              name: "Иванов Иван Глебович",
+              duration: 60,
+              title: "Склад",
+            },
+            {
+              id: 8,
+              name: "Иванов Иван Артемович",
+              duration: 60,
+              title: "Склад",
+            },
+            {
+              id: 9,
+              name: "Иванов Иван Ирекович",
+              duration: 60,
+              title: "Склад",
+            },
+          ],
         },
       ],
       events: [],
     };
   },
   methods: {
-    onEventDragStart(e, item) {
-      e.dataTransfer.setData("event", JSON.stringify(item));
-      e.dataTransfer.setData("cursor-grab-at", e.offsetY);
-    },
-    onEventDrop({ event, originalEvent, external }) {
+    addEvent(event) {
       this.events.push(event);
-      if (external) {
-        const extEventToDeletePos = this.list.findIndex(
-          (item) => item.id === originalEvent.id
-        );
-        if (extEventToDeletePos > -1) this.list.splice(extEventToDeletePos, 1);
-      }
+    },
+    removeItem({ id, title }) {
+      const preparedGroup = this.groups.find((group) => group.title === title);
+      const extEventToDeletePos = preparedGroup.users.findIndex(
+        (user) => user.id === id
+      );
+      extEventToDeletePos > -1
+        ? preparedGroup.users.splice(extEventToDeletePos, 1)
+        : "";
+    },
+  },
+  computed: {
+    notedCount() {
+      return this.events.length;
     },
   },
 };
@@ -61,4 +170,6 @@ export default {
 .appworkplace
   &__main
     display: flex
+    justify-content: space-between
+    gap: 10px
 </style>

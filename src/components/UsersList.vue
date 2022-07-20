@@ -1,49 +1,80 @@
 <template>
   <div class="users-list">
-    <div
-      class="external-event"
-      v-for="(item, i) in list"
-      :key="i"
-      draggable="true"
-      @dragstart="onEventDragStart($event, item)"
-    >
-      <strong>{{ item.title }}</strong>
-      ({{ item.duration ? `${item.duration} min` : "no duration" }})
-      <div>{{ item.content }}</div>
+    <div class="users-list__header">
+      <p class="users-list__users-count">Список сотрудников {{ userCount }}</p>
+      <p class="users-list__users-noted">Записанных {{ notedCount }}</p>
+    </div>
+    <div class="users-list__table-header">
+      <p class="users-list__table-title">ФИО</p>
+      <p>Дата записи</p>
+    </div>
+    <div class="users-list__group" v-for="group in groups" :key="group.title">
+      <p class="users-list__group-title">{{ group.title }}</p>
+      <div
+        class="users-list__list"
+        v-for="(user, i) in group.users"
+        :key="i"
+        draggable="true"
+        @dragstart="onEventDragStart($event, user)"
+      >
+        <p class="users-list__grouped-user">{{ user.name }}</p>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      list: [
-        {
-          id: 1,
-          title: "Ext. Event 1",
-          content: "content 1",
-          duration: 60,
-        },
-        {
-          id: 2,
-          title: "Ext. Event 2",
-          content: "content 2",
-          duration: 30,
-        },
-        {
-          id: 3,
-          title: "Ext. Event 3",
-          content: "content 3",
-        },
-      ],
-    };
+  props: {
+    groups: {
+      type: Array,
+      required: true,
+    },
+    notedCount: {
+      type: Number,
+      required: true,
+    },
+  },
+  computed: {
+    userCount() {
+      return this.groups.reduce(
+        (prev, current) => prev.users.length + current.users.length
+      );
+    },
   },
   methods: {
-    onEventDragStart(e, item) {
-      e.dataTransfer.setData("event", JSON.stringify(item));
+    onEventDragStart(e, user) {
+      e.dataTransfer.setData("event", JSON.stringify(user));
       e.dataTransfer.setData("cursor-grab-at", e.offsetY);
     },
   },
 };
 </script>
-<style lang=""></style>
+<style lang="sass">
+.users-list
+  width: 382px
+  display: flex
+  flex-direction: column
+  gap: 20px
+  &__list
+    padding-left: 20px
+  &__header
+    display: flex
+    justify-content: space-between
+    gap: 4px
+  &__users-count
+    font-size: 20px
+  &__users-noted
+    font-size: 16px
+    color: #128BE3
+  &__table-header
+    font-size: 12px
+    display: flex
+    color: #999999
+    border-bottom: 1px solid #999999
+  &__table-title
+    flex-basis: 50%
+  &__grouped-user
+    color: #353535
+    font-size: 14px
+    font-weight: 400
+</style>

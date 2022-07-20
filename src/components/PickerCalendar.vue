@@ -23,19 +23,18 @@ export default {
   components: {
     VueCal,
   },
-  data() {
-    return {
-      events: [],
-    };
+  props: {
+    events: {
+      type: Array,
+      required: true,
+    },
   },
   methods: {
     onEventDrop({ event, originalEvent, external }) {
-      this.events.push(event);
+      this.$emit("add-event", event);
       if (external) {
-        const extEventToDeletePos = this.list.findIndex(
-          (item) => item.id === originalEvent.id
-        );
-        if (extEventToDeletePos > -1) this.list.splice(extEventToDeletePos, 1);
+        const { id, title } = originalEvent;
+        this.$emit("remove-item", { id, title });
       }
     },
   },
