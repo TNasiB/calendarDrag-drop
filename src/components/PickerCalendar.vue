@@ -69,7 +69,10 @@ export default {
       //то мы его пересобираем, чтобы добавить сразу группу
       if (!!event.users) {
         event = event.users.map((user) => {
-          return Object.assign(user, event);
+          Object.assign(user, event);
+          //Решение бага с бесконечным сливанием пользователей в пользователей
+          const { users, ...rest } = user;
+          return rest;
         });
       }
       this.$emit("add-event", event);

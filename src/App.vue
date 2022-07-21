@@ -67,7 +67,6 @@ export default {
     addEvent(event) {
       if (!!event.length) {
         //Данный фрагмент позволяет отправлять драгндропом сразу всю группу пользователей
-
         //Для начала я проверяю и удаляю пользоваталей с других дат, если его перенсли на другую дату
         this.events = this.events.filter((evt) => {
           const result = event.find((e) => e.id === evt.id);
@@ -88,14 +87,15 @@ export default {
         );
         return;
       }
-
       //Добавление одного пользователя
       const { id, title } = event;
       this.events = this.events.filter((evt) => evt.id !== id);
       this.events.push(event);
 
       const preparedGroup = this.groups.find((group) => group.title === title);
+      console.log(preparedGroup);
       const user = preparedGroup.users.find((user) => user.id === id);
+
       Object.assign(user, event);
     },
     removeItem({ id, title }) {

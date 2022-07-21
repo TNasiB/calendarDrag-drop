@@ -14,7 +14,7 @@
           <template #header>
             <TextBadge
               draggable="true"
-              @dragstart="onEventDragStart($event, group.users)"
+              @dragstart="onEventDragStart($event, group.users, group.title)"
               :label="group.title"
               @click="toggleDropdown"
             />
@@ -66,14 +66,13 @@ export default {
     },
   },
   methods: {
-    onEventDragStart(e, data) {
+    onEventDragStart(e, data, title) {
       if (Array.isArray(data)) {
-        const obj = { users: [...data] };
+        const obj = { users: [...data], title };
         e.dataTransfer.setData("event", JSON.stringify(obj));
         e.dataTransfer.setData("cursor-grab-at", e.offsetY);
         return;
       }
-      console.log(data);
       e.dataTransfer.setData("event", JSON.stringify(data));
       e.dataTransfer.setData("cursor-grab-at", e.offsetY);
     },
