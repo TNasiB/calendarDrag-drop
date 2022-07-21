@@ -9,7 +9,6 @@
       :cellClickHold="false"
       :events="events"
       @event-drop="onEventDrop"
-      @event-drag-create="logEvents('event-drag-create', $event)"
       dblclickToNavigate
       :clickToNavigate="false"
       style="height: 450px; width: 610px"
@@ -65,17 +64,18 @@ export default {
     },
   },
   methods: {
-    onEventDrop({ event, originalEvent, external }) {
-      this.$emit("add-event", event);
-      if (external) {
-        const { id, title } = originalEvent;
-        this.$emit("remove-item", { id, title });
+    onEventDrop({ event }) {
+      //Если нам пришел не один пользователь а массив,
+      //то мы его пересобираем, чтобы добавить сразу группу
+      if (!!event.users) {
+        event = event.users.map((user) => {
+          return Object.assign(user, event);
+        });
       }
-    },
-    log(value) {
-      console.log(value);
+      this.$emit("add-event", event);
     },
     defineClassCell(count) {
+      //Определение для стилей счетчиков
       return count === 0
         ? "empty"
         : count < 25

@@ -65,15 +65,40 @@ export default {
   },
   methods: {
     addEvent(event) {
+      if (!!event.length) {
+        //Данный фрагмент позволяет отправлять драгндропом сразу всю группу пользователей
+
+        //Для начала я проверяю и удаляю пользоваталей с других дат, если его перенсли на другую дату
+        this.events = this.events.filter((evt) => {
+          const result = event.find((e) => e.id === evt.id);
+          return !result ? true : false;
+        });
+
+        //Далее я добавляю пользователей на эту дату
+        this.events.push(...event);
+
+        //Далее я ищу одинаковые объекты в массиве дат и
+        //в массиве пользователей (вложены в группы), в случае совпадения, сливаю их
+        this.groups.forEach((group) =>
+          group.users.forEach((user) => {
+            event.forEach((evt) =>
+              evt.id === user.id ? Object.assign(user, evt) : ""
+            );
+          })
+        );
+        return;
+      }
+
+      //Добавление одного пользователя
       const { id, title } = event;
       this.events = this.events.filter((evt) => evt.id !== id);
       this.events.push(event);
+
       const preparedGroup = this.groups.find((group) => group.title === title);
       const user = preparedGroup.users.find((user) => user.id === id);
       Object.assign(user, event);
     },
     removeItem({ id, title }) {
-      console.log(id);
       const preparedGroup = this.groups.find((group) => group.title === title);
       const extEventToDeletePos = preparedGroup.users.findIndex(
         (user) => user.id === id

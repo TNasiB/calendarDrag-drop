@@ -12,7 +12,12 @@
       <div class="users-list__group" v-for="group in groups" :key="group.title">
         <AppDropdown>
           <template #header>
-            <TextBadge :label="group.title" @click="toggleDropdown" />
+            <TextBadge
+              draggable="true"
+              @dragstart="onEventDragStart($event, group.users)"
+              :label="group.title"
+              @click="toggleDropdown"
+            />
           </template>
 
           <div class="users-list__dropdown">
@@ -61,8 +66,15 @@ export default {
     },
   },
   methods: {
-    onEventDragStart(e, user) {
-      e.dataTransfer.setData("event", JSON.stringify(user));
+    onEventDragStart(e, data) {
+      if (Array.isArray(data)) {
+        const obj = { users: [...data] };
+        e.dataTransfer.setData("event", JSON.stringify(obj));
+        e.dataTransfer.setData("cursor-grab-at", e.offsetY);
+        return;
+      }
+      console.log(data);
+      e.dataTransfer.setData("event", JSON.stringify(data));
       e.dataTransfer.setData("cursor-grab-at", e.offsetY);
     },
     removeUser(data) {
