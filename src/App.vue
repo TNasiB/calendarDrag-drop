@@ -66,20 +66,19 @@ export default {
   methods: {
     addEvent(event) {
       const { id, title } = event;
-      console.log(id, title);
-      this.events = this.events.filter(
-        (event) => event.id !== id && event.title !== title
-      );
+      this.events = this.events.filter((evt) => evt.id !== id);
       this.events.push(event);
       const preparedGroup = this.groups.find((group) => group.title === title);
       const user = preparedGroup.users.find((user) => user.id === id);
       Object.assign(user, event);
     },
     removeItem({ id, title }) {
+      console.log(id);
       const preparedGroup = this.groups.find((group) => group.title === title);
       const extEventToDeletePos = preparedGroup.users.findIndex(
         (user) => user.id === id
       );
+      this.events = this.events.filter((event) => event.id !== id);
       extEventToDeletePos > -1
         ? preparedGroup.users.splice(extEventToDeletePos, 1)
         : "";
