@@ -1,5 +1,17 @@
+@font-face {
+  font-family: "PFDinDisplayPro";
+  font-weight: 500;
+  src: url("./assets/fonts/PFDinDisplayPro-Medium.ttf");
+}
+@font-face {
+  font-family: "PFDinDisplayPro";
+  font-weight: 400;
+  src: url("./assets/fonts/PFDinDisplayPro-Regular.ttf");
+}
+
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "PFDinDisplayPro", sans-serif;
+  font-weight: 400;
 }
 * {
   margin: 0;

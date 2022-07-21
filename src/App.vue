@@ -6,7 +6,11 @@
         @add-event="addEvent"
         @remove-item="removeItem"
       />
-      <UserList :groups="groups" :notedCount="notedCount" />
+      <UserList
+        :groups="groups"
+        :notedCount="notedCount"
+        @remove-user="removeItem"
+      />
     </section>
   </div>
 </template>

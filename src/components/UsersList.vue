@@ -8,22 +8,38 @@
       <p class="users-list__table-title">ФИО</p>
       <p>Дата записи</p>
     </div>
-    <div class="users-list__group" v-for="group in groups" :key="group.title">
-      <p class="users-list__group-title">{{ group.title }}</p>
-      <div
-        class="users-list__list"
-        v-for="(user, i) in group.users"
-        :key="i"
-        draggable="true"
-        @dragstart="onEventDragStart($event, user)"
-      >
-        <p class="users-list__grouped-user">{{ user.name }}</p>
+    <div class="users-list__group--scroll">
+      <div class="users-list__group" v-for="group in groups" :key="group.title">
+        <AppDropdown>
+          <template #header>
+            <TextBadge :label="group.title" @click="toggleDropdown" />
+          </template>
+
+          <div class="users-list__dropdown">
+            <TextBadge
+              v-for="user in group.users"
+              :key="user.name"
+              :label="user.name"
+              :id="user.id"
+              :group="group.title"
+              :sub="true"
+              @dragstart="onEventDragStart($event, user)"
+              @remove-user="removeUser"
+              draggable="true"
+            />
+          </div>
+        </AppDropdown>
       </div>
     </div>
   </div>
 </template>
+
 <script>
+import TextBadge from "../components/TextBadge.vue";
+import AppDropdown from "../components/AppDropdown.vue";
+
 export default {
+  components: { TextBadge, AppDropdown },
   props: {
     groups: {
       type: Array,
@@ -46,6 +62,9 @@ export default {
       e.dataTransfer.setData("event", JSON.stringify(user));
       e.dataTransfer.setData("cursor-grab-at", e.offsetY);
     },
+    removeUser(data) {
+      this.$emit("remove-user", data);
+    },
   },
 };
 </script>
@@ -55,8 +74,7 @@ export default {
   display: flex
   flex-direction: column
   gap: 20px
-  &__list
-    padding-left: 20px
+  padding: 5px
   &__header
     display: flex
     justify-content: space-between
@@ -70,6 +88,7 @@ export default {
     font-size: 12px
     display: flex
     color: #999999
+    padding-bottom: 10px
     border-bottom: 1px solid #999999
   &__table-title
     flex-basis: 50%
@@ -77,4 +96,9 @@ export default {
     color: #353535
     font-size: 14px
     font-weight: 400
+  &__group
+    border-bottom: 1px solid #999999
+  &__group--scroll
+    height: 400px
+    overflow-y: scroll
 </style>
