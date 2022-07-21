@@ -228,8 +228,6 @@ export default {
     font-size: 24px
     font-weight: 500
     max-width: 618px
-  ::v-deep &__delete-all-icon
-    color: red !important
   &__title-box
     display: flex
     align-items: center
