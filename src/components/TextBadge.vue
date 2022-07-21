@@ -8,22 +8,29 @@
       <p class="text-badge__label">{{ label }}</p>
     </div>
     <div class="text-badge__label-info">
-      <p v-if="sub" class="text-badge__date">11.11.1111</p>
+      <p v-if="sub" class="text-badge__date">{{ defineDate }}</p>
       <img :src="`../src/assets/img/${defineIcon}.svg`" @click="removeUser" />
     </div>
   </div>
 </template>
+
 <script>
+import dayjs from "dayjs";
+
 export default {
   props: {
     sub: { type: Boolean, default: false },
     id: { type: Number, default: null },
     group: { type: String, default: "" },
     label: { type: String, required: true },
+    end: { type: String, default: "" },
   },
   computed: {
     defineIcon() {
       return this.sub ? "trash-icon" : "arrow-bottom";
+    },
+    defineDate() {
+      return !!this.end ? dayjs(this.end).format("DD.MM.YYYY") : "--.--.----";
     },
   },
   methods: {

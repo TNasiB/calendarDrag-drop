@@ -23,6 +23,7 @@
               :id="user.id"
               :group="group.title"
               :sub="true"
+              :end="user.end"
               @dragstart="onEventDragStart($event, user)"
               @remove-user="removeUser"
               draggable="true"
@@ -52,9 +53,11 @@ export default {
   },
   computed: {
     userCount() {
-      return this.groups.reduce(
-        (prev, current) => prev.users.length + current.users.length
-      );
+      let count = 0;
+      this.groups.forEach((group) => {
+        count += group.users.length;
+      });
+      return count;
     },
   },
   methods: {

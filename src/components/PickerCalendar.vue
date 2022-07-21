@@ -1,5 +1,4 @@
 <template>
-  <!-- eventsOnMonthView -->
   <div class="picker-calendar">
     <vue-cal
       active-view="month"
@@ -15,18 +14,6 @@
       :clickToNavigate="false"
       style="height: 450px; width: 610px"
     >
-      <!-- <template v-slot:cell-content="{ cell, view, events }">
-        <span
-          class="vuecal__cell-date"
-          :class="view.id"
-          v-if="view.id === 'mounth'"
-        >
-          {{ cell.date.getDate() }}
-        </span>
-        <p v-if="view.id === 'month' && events.length">
-          {{ events.length }}
-        </p></template
-      > -->
       <template v-slot:cell-content="{ cell, events }">
         <div
           class="picker-calendar__cell-info"
@@ -76,24 +63,6 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {
-      mounth: [
-        "Январь",
-        "Февраль",
-        "Март",
-        "Апрель",
-        "Май",
-        "Июнь",
-        "Июль",
-        "Август",
-        "Сентябрь",
-        "Октябрь",
-        "Ноябрь",
-        "Декабрь",
-      ],
-    };
   },
   methods: {
     onEventDrop({ event, originalEvent, external }) {
