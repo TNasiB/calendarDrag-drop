@@ -93,7 +93,6 @@ export default {
       this.events.push(event);
 
       const preparedGroup = this.groups.find((group) => group.title === title);
-      console.log(preparedGroup);
       const user = preparedGroup.users.find((user) => user.id === id);
 
       Object.assign(user, event);
